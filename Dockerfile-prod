@@ -1,0 +1,12 @@
+FROM nginx:alpine
+#FROM nginx
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Add Maintainer Info
+LABEL maintainer="jhon1187@gmail.com"
+
+COPY nginx_conf/prod.conf /etc/nginx/conf.d
+
+COPY dist /usr/share/nginx/html
