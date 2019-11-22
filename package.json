@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --aot --prod",
+    "build": "ng build --base-href \"/docker-web/\" --aot --prod",
     "build:prod": "npm run build -- --c=production",
     "test": "ng test",
     "lint": "ng lint",
