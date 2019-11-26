@@ -1,0 +1,36 @@
+# Start with a base image containing Java runtime
+FROM ubuntu:18.04
+
+# Add Maintainer Info
+LABEL maintainer="jhon1187@gmail.com"
+
+RUN rm /var/lib/apt/lists/* -vf && rm -rf /var/lib/apt/lists/* && apt-get clean
+
+#### Instalação dos programas básicos ####
+RUN apt-get update && \
+  apt-get dist-upgrade -y -f && \
+	apt-get install -y -f gnupg-agent && \
+	apt-get install -y -f wget && \
+	apt-get install -y -f apt-transport-https && \
+	apt-get install -y -f ca-certificates && \
+	apt-get install -y -f curl && \
+	apt-get install -y -f software-properties-common
+
+
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
+
+RUN apt-get remove --auto-remove openjdk*
+
+#### Instalação do Java, OpenSSH e GIT ####
+RUN apt update && apt-get install -y -f openjdk-11-jdk && \
+	apt-get install -y -f openjdk-11-jdk-headless && \
+	apt-get install -y -f nodejs && apt-get install -y -f npm && \
+	apt-get install -y -f git && apt-get install -y -f openssh-server
+
+
+VOLUME /etc/agent
+
+RUN wget http://10.27.11.3:8080/jnlpJars/agent.jar
+
+# Run the jar file
+ENTRYPOINT ["java", "-jar", "agent.jar", "-jnlpUrl", "http://10.27.11.3:8080/computer/agent-nodejs/slave-agent.jnlp", "-secret", "b769b4e4bb4ea557c421f8b643f03b333f96144729b4d55f469488befb01c290", "-workDir", "/home/jenkins/agent"]
